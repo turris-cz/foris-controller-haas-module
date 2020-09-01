@@ -1,0 +1,3 @@
+config haas 'settings'
+    option token ''
+    list fw_zone 'wan'

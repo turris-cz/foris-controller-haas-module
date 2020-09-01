@@ -1,0 +1,77 @@
+{
+    "definitions": {
+        "token": {"type": "string", "pattern": "[a-f0-9]{32}"}
+    },
+    "oneOf": [
+        {
+            "description": "Get haas settings request",
+            "properties": {
+                "module": {"enum": ["haas"]},
+                "kind": {"enum": ["request"]},
+                "action": {"enum": ["get_settings"]}
+            },
+            "additionalProperties": false
+        },
+        {
+            "description": "Get haas settings reply",
+            "properties": {
+                "module": {"enum": ["haas"]},
+                "kind": {"enum": ["reply"]},
+                "action": {"enum": ["get_settings"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "token": {
+                            "oneOf": [
+                                {"$ref": "#/definitions/token"},
+                                {"enum": [""]}
+                            ]
+                        },
+                        "enabled": {"type": "boolean"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["token", "enabled"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Update haas settings request",
+            "properties": {
+                "module": {"enum": ["haas"]},
+                "kind": {"enum": ["request"]},
+                "action": {"enum": ["update_settings"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "token": {"$ref": "#/definitions/token"},
+                        "enabled": {"type": "boolean"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["token", "enabled"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Update haas settings reply",
+            "properties": {
+                "module": {"enum": ["haas"]},
+                "kind": {"enum": ["reply"]},
+                "action": {"enum": ["update_settings"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "result": {"type": "boolean"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["result"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        }
+    ]
+}
