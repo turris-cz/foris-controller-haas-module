@@ -1,6 +1,6 @@
 #
 # foris-controller-haas-module
-# Copyright (C) 2020 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2020-2021 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -72,9 +72,9 @@ def test_update_settings(file_root_init, uci_configs_init, infrastructure):
     assert res["data"]["token"] == new_token
 
 
+@pytest.mark.parametrize("new_token", ["81f2cd612ea14da5bbaeaf08e7dc2a39","3e489258c9099ac89096374a48fe04a1b46e9314142f6d02"])
 @pytest.mark.only_backends(["openwrt"])
-def test_update_settings_uci(file_root_init, uci_configs_init, infrastructure):
-    new_token = "81f2cd612ea14da5bbaeaf08e7dc2a39"
+def test_update_settings_uci(file_root_init, uci_configs_init, infrastructure, new_token):
     data = {"token": new_token, "enabled": False}
 
     res = infrastructure.process_message(

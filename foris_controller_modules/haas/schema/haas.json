@@ -1,6 +1,6 @@
 {
     "definitions": {
-        "token": {"type": "string", "pattern": "[a-f0-9]{32}"}
+        "token": {"type": "string", "pattern": "[a-f0-9]{32,48}"}
     },
     "oneOf": [
         {
