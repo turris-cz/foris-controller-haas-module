@@ -1,20 +1,19 @@
-before_script:
-  - pip install virtualenv
-  - virtualenv -p "$(which python)" /tmp/test
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  CI_TOX_ENVS: "-e py39,py310"
+  CI_TOX_EXTRA: "--backend openwrt --backend mock"
+  CI_TOX_IMAGE: registry.nic.cz/turris/foris-ci/python3
+  IMAGE: registry.nic.cz/turris/foris-ci/python3
+  DEBIAN_FRONTEND: noninteractive
 
-.run_script: &run_script
-  script:
-    - source /tmp/test/bin/activate
+stages:
+  - lint
+  - test
+  - build
+  - publish
 
-    - pip install .
-
-    - python setup.py test --addopts="--backend openwrt --backend mock"
-
-test_python3:
-  image: registry.nic.cz/turris/foris-ci/python3
-  <<: *run_script
-
-flake8:
-  image: registry.nic.cz/turris/foris-ci/python3
-  script:
-    - python setup.py flake8
+include:
+  - remote: "https://gitlab.nic.cz/turris/foris-controller/packages/-/raw/master/templates/python/base.yml"
+  - remote: "https://gitlab.nic.cz/turris/foris-controller/packages/-/raw/master/templates/python/linters.yml"
+  - remote: "https://gitlab.nic.cz/turris/foris-controller/packages/-/raw/master/templates/python/tox.yml"
+  - remote: "https://gitlab.nic.cz/turris/foris-controller/packages/-/raw/master/templates/python/build_and_publish.yml"
