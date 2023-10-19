@@ -1,6 +1,6 @@
 #
 # foris-controller-haas-module
-# Copyright (C) 2020-2021 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2020-2023 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,16 +19,7 @@
 
 import pytest
 
-from foris_controller_testtools.fixtures import (
-    only_message_buses,
-    only_backends,
-    infrastructure,
-    notify_api,
-    uci_configs_init,
-    file_root_init,
-    UCI_CONFIG_DIR_PATH,
-    init_script_result,
-)
+from foris_controller_testtools.fixtures import UCI_CONFIG_DIR_PATH
 from foris_controller_testtools.utils import get_uci_module, check_service_result, INIT_SCRIPT_TEST_DIR
 
 
