@@ -55,5 +55,6 @@ class HaasUci:
             else:
                 services.disable(HaasUci.SERVICE, fail_on_error=False)
                 services.stop(HaasUci.SERVICE, fail_on_error=False)
+            services.restart("firewall", fail_on_error=False)
 
         return True

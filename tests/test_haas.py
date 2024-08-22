@@ -20,7 +20,7 @@
 import pytest
 
 from foris_controller_testtools.fixtures import UCI_CONFIG_DIR_PATH
-from foris_controller_testtools.utils import get_uci_module, check_service_result, INIT_SCRIPT_TEST_DIR
+from foris_controller_testtools.utils import get_uci_module, check_service_result
 
 
 def test_get_settings(file_root_init, infrastructure):
@@ -65,7 +65,13 @@ def test_update_settings(file_root_init, uci_configs_init, infrastructure):
 
 @pytest.mark.parametrize("new_token", ["81f2cd612ea14da5bbaeaf08e7dc2a39","3e489258c9099ac89096374a48fe04a1b46e9314142f6d02"])
 @pytest.mark.only_backends(["openwrt"])
-def test_update_settings_uci(file_root_init, uci_configs_init, infrastructure, new_token):
+def test_update_settings_uci(
+    file_root_init,
+    uci_configs_init,
+    infrastructure,
+    new_token,
+    init_script_result,
+):
     data = {"token": new_token, "enabled": False}
 
     res = infrastructure.process_message(
@@ -90,3 +96,5 @@ def test_update_settings_uci(file_root_init, uci_configs_init, infrastructure, n
         data = backend.read()
     token = uci.get_option_named(data, "haas", "settings", "token")
     assert new_token == token
+
+    check_service_result("firewall", "restart", True)
