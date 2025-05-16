@@ -72,6 +72,26 @@
             },
             "additionalProperties": false,
             "required": ["data"]
+        },
+        {
+            "description": "Notification that haas caught a login attempt",
+            "properties": {
+                "module": {"enum": ["haas"]},
+                "kind": {"enum": ["notification"]},
+                "action": {"enum": ["login_attempt"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "peer": {"type": "string"},
+                        "user": {"type": "string"},
+                        "password": {"type": "string"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["peer", "user", "password"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
         }
     ]
 }
