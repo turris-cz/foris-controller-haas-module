@@ -1,6 +1,6 @@
 #
 # foris-controller-haas-module
-# Copyright (C) 2020 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2025 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 #
 
 import logging
+from pathlib import Path
 
 from foris_controller_backends.uci import UciBackend, get_option_named
 from foris_controller_backends.services import OpenwrtServices
@@ -26,7 +27,14 @@ logger = logging.getLogger(__name__)
 
 
 class HaasUci:
-    SERVICE = "haas-proxy"
+    @staticmethod
+    def get_service():
+        if Path("/etc/init.d/sshoxy-haas").exists():
+            # new proxy present
+            return "sshoxy-haas"
+        else:
+            # fallback to old proxy
+            return "haas-proxy"
 
     @classmethod
     def get_settings(cls):
@@ -36,7 +44,7 @@ class HaasUci:
         token = get_option_named(haas_data, "haas", "settings", "token", "")
 
         with OpenwrtServices() as services:
-            enabled = services.is_enabled(HaasUci.SERVICE)
+            enabled = services.is_enabled(HaasUci.get_service())
 
         return {
             "token": token,
@@ -49,12 +57,13 @@ class HaasUci:
             backend.set_option("haas", "settings", "token", token)
 
         with OpenwrtServices() as services:
+            service = HaasUci.get_service()
             if enabled:
-                services.enable(HaasUci.SERVICE, fail_on_error=False)
-                services.restart(HaasUci.SERVICE, fail_on_error=False)
+                services.enable(service, fail_on_error=False)
+                services.restart(service, fail_on_error=False)
             else:
-                services.disable(HaasUci.SERVICE, fail_on_error=False)
-                services.stop(HaasUci.SERVICE, fail_on_error=False)
+                services.disable(service, fail_on_error=False)
+                services.stop(service, fail_on_error=False)
             services.restart("firewall", fail_on_error=False)
 
         return True
